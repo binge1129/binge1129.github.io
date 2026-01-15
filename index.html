@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片显示 Powered by Github&彬哥</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-image 0.5s ease;
+        }
+
+        .container {
+            text-align: center;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .time-display {
+            font-size: 3.5em;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+            letter-spacing: 1px;
+            background: transparent; /* 背景透明 */
+        }
+
+        .date-display {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+            background: transparent; /* 背景透明 */
+        }
+
+        .quote-container {
+            margin: 30px 0;
+            padding: 25px;
+            /* 移除毛玻璃效果 */
+            background: rgba(0, 0, 0, 0.2); /* 简单的半透明背景 */
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .quote-text {
+            font-size: 1.3em;
+            color: white;
+            line-height: 1.7;
+            font-style: italic;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+            font-weight: 400;
+        }
+
+        .quote-author {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 15px;
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            width: 180px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: white;
+            background: rgba(255, 255, 255, 0.1); /* 半透明白色背景 */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 3px solid rgba(100, 181, 246, 0.5); /* 加粗蓝色边框 */
+            border-radius: 15px; /* R角边框 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 简化阴影效果 */
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.15); /* 悬停时略微增加背景透明度 */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* 悬停时增强阴影 */
+            border-color: rgba(100, 181, 246, 0.7); /* 悬停时边框更明显 */
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 点击时阴影减弱 */
+        }
+
+        /* 添加页脚信息 */
+        .footer-info {
+            margin-top: 25px;
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+        }
+
+        .loading {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .error {
+            color: #ff9e9e;
+            font-size: 1em;
+            font-weight: 500;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 600px) {
+            .time-display {
+                font-size: 2.5em;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 260px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+
+        /* 添加背景渐变遮罩 */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="time-display" id="timeDisplay"></div>
+        <div class="date-display" id="dateDisplay"></div>
+        
+        <div class="quote-container" id="quoteContainer">
+            <div class="loading">正在加载每日一言...</div>
+        </div>
+        
+        <div class="button-container">
+            <button class="btn" onclick="viewStandardImage()">标准图片</button>
+            <button class="btn" onclick="viewPanoramicImage()">全景图片</button>
+        </div>
+        
+        <div class="footer-info">Powered by Github&彬哥</div>
+    </div>
+
+    <script>
+        // 获取必应每日一图
+        function setBingBackground() {
+            const bingApiUrl = 'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN';
+            
+            fetch(bingApiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const imageUrl = 'https://www.bing.com' + data.images[0].url;
+                    document.body.style.backgroundImage = `url('${imageUrl}')`;
+                })
+                .catch(error => {
+                    console.error('获取必应图片失败:', error);
+                    // 使用远程图片作为备用背景
+                    document.body.style.backgroundImage = `url('img/2.jpg')`;
+                    
+                    // 如果远程图片加载失败，使用纯色背景
+                    const img = new Image();
+                    img.onerror = function() {
+                        document.body.style.backgroundImage = 'none';
+                        document.body.style.background = 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)';
+                    };
+                    img.src = 'img/2.jpg';
+                });
+        }
+
+        // 获取每日一言
+        function getDailyQuote() {
+            const quoteContainer = document.getElementById('quoteContainer');
+            
+            // 使用 hitokoto.cn 的 API
+            fetch('https://v1.hitokoto.cn/')
+                .then(response => response.json())
+                .then(data => {
+                    const quote = data.hitokoto;
+                    const author = data.from_who ? data.from_who : '佚名';
+                    const from = data.from ? `《${data.from}》` : '';
+                    
+                    quoteContainer.innerHTML = `
+                        <div class="quote-text">"${quote}"</div>
+                        <div class="quote-author">— ${author} ${from}</div>
+                    `;
+                })
+                .catch(error => {
+                    console.error('获取每日一言失败:', error);
+                    quoteContainer.innerHTML = '<div class="error">加载失败，请刷新页面重试</div>';
+                });
+        }
+
+        // 更新时间显示
+        function updateTime() {
+            const now = new Date();
+            const timeDisplay = document.getElementById('timeDisplay');
+            const dateDisplay = document.getElementById('dateDisplay');
+            
+            // 格式化时间
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            timeDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+            
+            // 格式化日期
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            const weekDay = weekDays[now.getDay()];
+            dateDisplay.textContent = `${year}年${month}月${day}日 ${weekDay}`;
+        }
+
+        // 按钮点击事件
+        function viewStandardImage() {
+            alert('正在加载标准图片...');
+            // 这里可以添加实际的图片查看逻辑
+        }
+
+        function viewPanoramicImage() {
+            alert('正在加载全景图片...');
+            // 这里可以添加实际的图片查看逻辑
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置背景
+            setBingBackground();
+            
+            // 获取每日一言
+            getDailyQuote();
+            
+            // 更新时间和日期
+            updateTime();
+            setInterval(updateTime, 1000); // 每秒更新一次
+            
+            // 每分钟更新一次背景
+            setInterval(setBingBackground, 60000);
+            
+            // 每30秒获取一次新一言
+            setInterval(getDailyQuote, 30000);
+        });
+    </script>
+</body>
+</html>
