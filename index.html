@@ -39,7 +39,7 @@
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
             font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
             letter-spacing: 1px;
-            background: transparent; /* 背景透明 */
+            background: transparent;
         }
 
         .date-display {
@@ -48,14 +48,13 @@
             margin-bottom: 30px;
             text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
             font-weight: 500;
-            background: transparent; /* 背景透明 */
+            background: transparent;
         }
 
         .quote-container {
             margin: 30px 0;
             padding: 25px;
-            /* 移除毛玻璃效果 */
-            background: rgba(0, 0, 0, 0.2); /* 简单的半透明背景 */
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             min-height: 100px;
@@ -100,29 +99,29 @@
             font-size: 1.2em;
             font-weight: 600;
             color: white;
-            background: rgba(255, 255, 255, 0.1); /* 半透明白色背景 */
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 3px solid rgba(100, 181, 246, 0.5); /* 加粗蓝色边框 */
-            border-radius: 15px; /* R角边框 */
+            border: 3px solid rgba(100, 181, 246, 0.5);
+            border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 简化阴影效果 */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
             text-align: center;
         }
 
         .btn:hover {
-            background: rgba(255, 255, 255, 0.15); /* 悬停时略微增加背景透明度 */
+            background: rgba(255, 255, 255, 0.15);
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* 悬停时增强阴影 */
-            border-color: rgba(100, 181, 246, 0.7); /* 悬停时边框更明显 */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            border-color: rgba(100, 181, 246, 0.7);
         }
 
         .btn:active {
             transform: translateY(1px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 点击时阴影减弱 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         /* 添加页脚信息 */
@@ -190,8 +189,8 @@
         </div>
         
         <div class="button-container">
-            <button class="btn" onclick="viewStandardImage()">标准图片</button>
-            <button class="btn" onclick="viewPanoramicImage()">全景图片</button>
+            <button class="btn" onclick="window.location.href='https://binge1129.github.io/tools/image.html'">标准图片</button>
+            <button class="btn" onclick="window.location.href='https://binge1129.github.io/tools/360-image.html'">全景图片</button>
         </div>
         
         <div class="footer-info">Powered by Github&彬哥</div>
@@ -211,7 +210,7 @@
                 .catch(error => {
                     console.error('获取必应图片失败:', error);
                     // 使用远程图片作为备用背景
-                    document.body.style.backgroundImage = `url('img/2.jpg')`;
+                    document.body.style.backgroundImage = `url('https://binge1129.github.io/img/2.jpg')`;
                     
                     // 如果远程图片加载失败，使用纯色背景
                     const img = new Image();
@@ -219,7 +218,7 @@
                         document.body.style.backgroundImage = 'none';
                         document.body.style.background = 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)';
                     };
-                    img.src = 'img/2.jpg';
+                    img.src = 'https://binge1129.github.io/img/2.jpg';
                 });
         }
 
@@ -265,17 +264,6 @@
             const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
             const weekDay = weekDays[now.getDay()];
             dateDisplay.textContent = `${year}年${month}月${day}日 ${weekDay}`;
-        }
-
-        // 按钮点击事件
-        function viewStandardImage() {
-            alert('正在加载标准图片...');
-            // 这里可以添加实际的图片查看逻辑
-        }
-
-        function viewPanoramicImage() {
-            alert('正在加载全景图片...');
-            // 这里可以添加实际的图片查看逻辑
         }
 
         // 初始化
