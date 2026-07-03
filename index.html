@@ -2,288 +2,1075 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图片显示 Powered by Github&彬哥</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>我的相册 - Powered by Github&彬哥</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary-color: #8ab4f8;
+            --bg-dark: #121212;
+            --text-light: #e8eaed;
+            --text-gray: #9aa0a6;
+            --transition-speed: 0.4s;
+            --glass-bg: rgba(30, 30, 35, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: 'Microsoft YaHei', 'Segoe UI', Arial, sans-serif;
-            height: 100vh;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: background-image 0.5s ease;
+            font-family: 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #000; color: var(--text-light);
+            overflow: hidden; height: 100vh; width: 100vw;
+            user-select: none; -webkit-user-select: none; -ms-user-select: none;
         }
 
-        .container {
-            text-align: center;
-            padding: 30px;
-            max-width: 600px;
-            width: 90%;
-        }
-
-        .time-display {
-            font-size: 3.5em;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
-            letter-spacing: 1px;
-            background: transparent;
-        }
-
-        .date-display {
-            font-size: 1.3em;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 30px;
-            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
-            font-weight: 500;
-            background: transparent;
-        }
-
-        .quote-container {
-            margin: 30px 0;
-            padding: 25px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .quote-text {
-            font-size: 1.3em;
-            color: white;
-            line-height: 1.7;
-            font-style: italic;
-            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
-            font-weight: 400;
-        }
-
-        .quote-author {
-            font-size: 1em;
-            color: rgba(255, 255, 255, 0.85);
-            margin-top: 15px;
-            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
-            font-weight: 500;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .btn {
-            width: 180px;
-            height: 60px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2em;
-            font-weight: 600;
-            color: white;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 3px solid rgba(100, 181, 246, 0.5);
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        /* 高光基础类 */
+        .glow-on-hover {
             position: relative;
             overflow: hidden;
-            text-align: center;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
-        .btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            border-color: rgba(100, 181, 246, 0.7);
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        /* 添加页脚信息 */
-        .footer-info {
-            margin-top: 25px;
-            font-size: 0.95em;
-            color: rgba(255, 255, 255, 0.8);
-            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
-            font-weight: 500;
-        }
-
-        .loading {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 1.1em;
-            font-weight: 500;
-        }
-
-        .error {
-            color: #ff9e9e;
-            font-size: 1em;
-            font-weight: 500;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-        }
-
-        @media (max-width: 600px) {
-            .time-display {
-                font-size: 2.5em;
-            }
-            
-            .button-container {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .btn {
-                width: 100%;
-                max-width: 260px;
-            }
-            
-            .container {
-                padding: 20px;
-            }
-        }
-
-        /* 添加背景渐变遮罩 */
-        body::before {
+        /* 内部径向高光 */
+        .glow-on-hover::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%);
-            z-index: -1;
+            inset: 0;
+            background: radial-gradient(circle at var(--x) var(--y), rgba(255,255,255,0.25) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            z-index: 1;
         }
+        .glow-on-hover:hover::after { opacity: 1; }
+
+        /* 手电筒式边缘高光 */
+        .glow-on-hover::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0s;
+            box-shadow:
+                inset 0 0 0 1.5px rgba(255, 255, 255, 0.6),
+                0 0 12px 2px rgba(255, 255, 255, 0.4);
+            -webkit-mask-image: radial-gradient(circle 70px at var(--x) var(--y), black 40%, transparent 70%);
+            mask-image: radial-gradient(circle 70px at var(--x) var(--y), black 40%, transparent 70%);
+        }
+        .glow-on-hover:hover::before {
+            opacity: 1;
+            transition: opacity 0.2s;
+        }
+
+        #bg-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center;
+            transition: opacity var(--transition-speed) ease, filter var(--transition-speed) ease;
+            z-index: 0; opacity: 0;
+            background-color: #1a1a2e;
+        }
+        #bg-layer::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 100%);
+        }
+
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .view-page {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0; visibility: hidden; transform: scale(0.98);
+            transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10; display: flex; flex-direction: column;
+        }
+        .view-page.active { opacity: 1; visibility: visible; transform: scale(1); z-index: 20; }
+
+        #view-password { justify-content: center; align-items: center; z-index: 50; background: #000; }
+        .pwd-container { padding: 40px; border-radius: 24px; text-align: center; width: 90%; max-width: 400px; }
+        .pwd-title { font-size: 1.5em; margin-bottom: 20px; font-weight: 500; letter-spacing: 2px; }
+        .pwd-input {
+            width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border);
+            background: rgba(0,0,0,0.3); color: white; font-size: 1.2em; text-align: center;
+            margin-bottom: 20px; outline: none; transition: border 0.3s;
+        }
+        .pwd-input:focus { border-color: var(--primary-color); }
+        .pwd-btn {
+            width: 100%; padding: 15px; border-radius: 12px; border: none;
+            background: var(--primary-color); color: #000; font-size: 1.1em; font-weight: bold;
+            cursor: pointer; transition: transform 0.2s, opacity 0.2s;
+        }
+        .pwd-btn:active { transform: scale(0.95); }
+        .pwd-btn:disabled { background: #555; color: #888; cursor: not-allowed; }
+        .pwd-msg { margin-top: 15px; font-size: 0.9em; color: #ff6b6b; min-height: 20px; }
+
+        #view-loading { justify-content: center; align-items: center; background: #000; z-index: 40; }
+        .loader-ring {
+            width: 60px; height: 60px; border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: var(--primary-color); border-radius: 50%;
+            animation: spin 1s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite; margin-bottom: 20px;
+        }
+        .loader-text { font-size: 1.1em; color: var(--text-gray); letter-spacing: 2px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        #view-home { justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .time-display { font-size: 4.5em; font-weight: 700; text-shadow: 0 4px 20px rgba(0,0,0,0.6); letter-spacing: 2px; }
+        .date-display { font-size: 1.2em; margin-bottom: 40px; text-shadow: 0 2px 10px rgba(0,0,0,0.6); }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.5) translateY(20px); }
+            70% { transform: scale(1.05) translateY(-5px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .pop-in-element {
+            opacity: 0;
+            animation: popIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        .pop-in-element:nth-child(1) { animation-delay: 0.1s; }
+        .pop-in-element:nth-child(2) { animation-delay: 0.2s; }
+        .pop-in-element:nth-child(3) { animation-delay: 0.3s; }
+
+        .quote-container {
+            padding: 25px 35px;
+            border-radius: 20px;
+            max-width: 600px;
+            margin-bottom: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .quote-container:active { transform: scale(0.97); }
+        .quote-text { font-size: 1.2em; font-style: italic; line-height: 1.6; min-height: 2.5em; }
+        .quote-author { margin-top: 15px; font-size: 0.9em; color: var(--text-gray); }
+
+        .btn-enter {
+            padding: 16px 45px; font-size: 1.2em; font-weight: 600; color: white;
+            border-radius: 30px; cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .btn-enter:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-3px); }
+
+        .gallery-container { height: 100%; display: flex; flex-direction: column; }
+        .app-bar {
+            position: sticky; top: 0; padding: 12px 20px; display: flex; align-items: center; gap: 15px; z-index: 100;
+            border-bottom: 1px solid var(--glass-border);
+            border-radius: 0 0 20px 20px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .btn-icon {
+            background: none; border: none; color: var(--text-light); cursor: pointer;
+            padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        }
+        .btn-icon svg { width: 24px; height: 24px; fill: currentColor; }
+        .app-title { font-size: 1.3em; font-weight: 500; }
+
+        .albums-scroll {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 100px;
+        }
+
+        .albums-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+        @media (max-width: 600px) {
+            .albums-grid {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+            }
+        }
+
+        .album-card {
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .album-card:hover { transform: translateY(-5px); }
+        .album-cover { width: 100%; aspect-ratio: 1; object-fit: cover; background: rgba(0,0,0,0.5); display: block; }
+        .album-info { padding: 15px; }
+        .album-title { font-size: 1.1em; font-weight: 500; margin-bottom: 5px; }
+        .album-count { font-size: 0.9em; color: var(--text-gray); display: flex; align-items: center; gap: 5px; }
+
+        .mini-spinner {
+            width: 12px; height: 12px; border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: var(--primary-color); border-radius: 50%;
+            animation: spin-mini 1s linear infinite;
+            display: none;
+        }
+
+        #view-about { padding: 0; }
+        #view-about .app-bar {
+            justify-content: center;
+            border-radius: 20px;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            max-width: 500px;
+        }
+        #view-about .app-title { margin-left: 0; }
+
+        .about-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 20px 20px 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .about-card {
+            padding: 30px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 500px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .about-card h2 { margin-bottom: 15px; color: var(--primary-color); }
+        .uptime { font-size: 0.85em; color: var(--text-gray); margin-left: 10px; }
+
+        .update-log-card {
+            padding: 25px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            line-height: 1.8;
+            margin-top: 0;
+            margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .update-log-card::-webkit-scrollbar { display: none; }
+        .update-log-card h3 { margin-bottom: 15px; color: var(--primary-color); }
+        .log-entry { margin-bottom: 10px; padding-left: 15px; border-left: 3px solid var(--primary-color); }
+        .log-version { font-weight: bold; color: white; }
+        .log-date { color: var(--text-gray); margin-left: 8px; }
+        .log-desc { color: var(--text-gray); margin-top: 4px; }
+
+        #bottom-nav {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+            display: flex; padding: 6px; border-radius: 40px; z-index: 100;
+            opacity: 0; visibility: hidden; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #bottom-nav.show { transform: translateX(-50%) translateY(0); opacity: 1; visibility: visible; }
+
+        .nav-capsule {
+            position: absolute; top: 6px; left: 6px; width: calc(50% - 6px); height: calc(100% - 12px);
+            background: rgba(255,255,255,0.15); border-radius: 30px;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 0;
+        }
+        .nav-item {
+            position: relative; z-index: 1; padding: 12px 35px; font-size: 1.1em; font-weight: 500;
+            color: var(--text-gray); cursor: pointer; transition: color 0.3s; user-select: none;
+        }
+        .nav-item.active { color: white; }
+
+        .photos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 3px; padding: 3px; }
+        @media (min-width: 600px) { .photos-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } }
+
+        .photo-item {
+            aspect-ratio: 1; overflow: hidden; cursor: pointer; position: relative; opacity: 0;
+            animation: popIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        .photo-item img, .photo-item video { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s; }
+        .photo-item:hover img, .photo-item:hover video { opacity: 0.8; }
+        .pano-badge {
+            position: absolute; bottom: 5px; left: 5px; background: rgba(0,0,0,0.6);
+            padding: 2px 6px; border-radius: 4px; font-size: 0.7em; display: flex; align-items: center; gap: 4px;
+        }
+        .grid-scanning-indicator {
+            grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--text-gray);
+            display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.9em; display: none;
+        }
+
+        #view-viewer { background: #000; }
+        .viewer-app-bar {
+            position: absolute; top: 0; width: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%);
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+            z-index: 100; transition: opacity 0.3s;
+        }
+        .viewer-content {
+            width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+        }
+        #standard-img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: grab; margin: auto; }
+        #standard-img:active { cursor: grabbing; }
+        #panorama-container { width: 100%; height: 100%; display: none; }
+        #video-container { width: 100%; height: 100%; display: none; align-items: center; justify-content: center; }
+        .plyr { width: 100%; max-height: 100%; }
+
+        .nav-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            border: none; color: white; width: 50px; height: 50px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; z-index: 50; transition: background 0.3s;
+        }
+        .nav-btn:hover { background: rgba(255,255,255,0.2); }
+        .nav-prev { left: 20px; }
+        .nav-next { right: 20px; }
+        @media (max-width: 768px) { .nav-btn { display: none; } }
+
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin-centered 1s linear infinite;
+            display: none;
+            z-index: 10;
+        }
+
+        .blinking-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background: var(--text-light);
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes spin-centered {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        @keyframes spin-mini { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="time-display" id="timeDisplay"></div>
-        <div class="date-display" id="dateDisplay"></div>
-        
-        <div class="quote-container" id="quoteContainer">
-            <div class="loading">正在加载每日一言...</div>
-        </div>
-        
-        <div class="button-container">
-            <button class="btn" onclick="window.location.href='https://binge1129.github.io/tools/image.html'">标准图片</button>
-            <button class="btn" onclick="window.location.href='https://binge1129.github.io/tools/360-image.html'">全景图片</button>
-        </div>
-        
-        <div class="footer-info">Powered by Github&彬哥</div>
+
+<div id="bg-layer"></div>
+
+<!-- 密码页 -->
+<div id="view-password" class="view-page active">
+    <div class="pwd-container glass pop-in-element glow-on-hover">
+        <div class="pwd-title">私密相册</div>
+        <input type="password" id="pwd-input" class="pwd-input" placeholder="请输入访问密码" autocomplete="off">
+        <button id="pwd-btn" class="pwd-btn glow-on-hover" onclick="verifyPassword()">解锁</button>
+        <div id="pwd-msg" class="pwd-msg"></div>
+    </div>
+</div>
+
+<!-- 加载页 -->
+<div id="view-loading" class="view-page">
+    <div class="loader-ring"></div>
+    <div class="loader-text">正在加载精彩内容...</div>
+</div>
+
+<!-- 主页 -->
+<div id="view-home" class="view-page">
+    <div class="time-display" id="timeDisplay">00:00:00</div>
+    <div class="date-display" id="dateDisplay">加载中...</div>
+
+    <div class="quote-container glass pop-in-element glow-on-hover" id="quoteContainer">
+        <div class="quote-text" id="quoteText">"<span class="blinking-cursor"></span>"</div>
+        <div class="quote-author" id="quoteAuthor">By 彬哥的留言</div>
     </div>
 
-    <script>
-        // 获取必应每日一图
-        function setBingBackground() {
-            const bingApiUrl = 'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN';
-            
-            fetch(bingApiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    const imageUrl = 'https://www.bing.com' + data.images[0].url;
-                    document.body.style.backgroundImage = `url('${imageUrl}')`;
-                })
-                .catch(error => {
-                    console.error('获取必应图片失败:', error);
-                    // 使用远程图片作为备用背景
-                    document.body.style.backgroundImage = `url('https://binge1129.github.io/img/2.jpg')`;
-                    
-                    // 如果远程图片加载失败，使用纯色背景
-                    const img = new Image();
-                    img.onerror = function() {
-                        document.body.style.backgroundImage = 'none';
-                        document.body.style.background = 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)';
-                    };
-                    img.src = 'https://binge1129.github.io/img/2.jpg';
-                });
-        }
+    <button class="btn-enter glass pop-in-element glow-on-hover" onclick="enterAlbums()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z"/>
+        </svg>
+        进入相册
+    </button>
+</div>
 
-        // 获取每日一言
-        function getDailyQuote() {
-            const quoteContainer = document.getElementById('quoteContainer');
-            
-            // 使用 hitokoto.cn 的 API
-            fetch('https://v1.hitokoto.cn/')
-                .then(response => response.json())
-                .then(data => {
-                    const quote = data.hitokoto;
-                    const author = data.from_who ? data.from_who : '佚名';
-                    const from = data.from ? `《${data.from}》` : '';
-                    
-                    quoteContainer.innerHTML = `
-                        <div class="quote-text">"${quote}"</div>
-                        <div class="quote-author">— ${author} ${from}</div>
-                    `;
-                })
-                .catch(error => {
-                    console.error('获取每日一言失败:', error);
-                    quoteContainer.innerHTML = '<div class="error">加载失败，请刷新页面重试</div>';
-                });
-        }
+<!-- 相册合集页 -->
+<div id="view-albums" class="view-page gallery-container">
+    <div class="app-bar glass" style="border-radius: 0 0 20px 20px;">
+        <button class="btn-icon glow-on-hover" onclick="navigateTo('view-home')">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <div class="app-title">我的合集</div>
+    </div>
 
-        // 更新时间显示
-        function updateTime() {
-            const now = new Date();
-            const timeDisplay = document.getElementById('timeDisplay');
-            const dateDisplay = document.getElementById('dateDisplay');
-            
-            // 格式化时间
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            timeDisplay.textContent = `${hours}:${minutes}:${seconds}`;
-            
-            // 格式化日期
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-            const weekDay = weekDays[now.getDay()];
-            dateDisplay.textContent = `${year}年${month}月${day}日 ${weekDay}`;
-        }
+    <div class="albums-scroll">
+        <div class="albums-grid">
+            <div class="album-card glass pop-in-element glow-on-hover" onclick="openAlbum('standard')">
+                <img class="album-cover" id="cover-standard" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="标准图片">
+                <div class="album-info">
+                    <div class="album-title">标准图片</div>
+                    <div class="album-count">
+                        <span id="count-standard">0 张照片</span>
+                        <div class="mini-spinner" id="spinner-standard"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="album-card glass pop-in-element glow-on-hover" onclick="openAlbum('pano')">
+                <img class="album-cover" id="cover-pano" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="全景图片">
+                <div class="album-info">
+                    <div class="album-title">360° 全景图片</div>
+                    <div class="album-count">
+                        <span id="count-pano">0 张照片</span>
+                        <div class="mini-spinner" id="spinner-pano"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="album-card glass pop-in-element glow-on-hover" onclick="openAlbum('video')">
+                <div style="position: relative; width: 100%; aspect-ratio: 1; background: #222;">
+                    <video class="album-cover" id="cover-video" muted playsinline style="position: absolute; top: 0; left: 0;"></video>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.5); border-radius: 50%; padding: 10px;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+                <div class="album-info">
+                    <div class="album-title">视频合集</div>
+                    <div class="album-count">
+                        <span id="count-video">0 个视频</span>
+                        <div class="mini-spinner" id="spinner-video"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            // 设置背景
-            setBingBackground();
-            
-            // 获取每日一言
-            getDailyQuote();
-            
-            // 更新时间和日期
-            updateTime();
-            setInterval(updateTime, 1000); // 每秒更新一次
-            
-            // 每分钟更新一次背景
-            setInterval(setBingBackground, 60000);
-            
-            // 每30秒获取一次新一言
-            setInterval(getDailyQuote, 30000);
+<!-- 关于页 -->
+<div id="view-about" class="view-page gallery-container">
+    <div class="app-bar glass glow-on-hover">
+        <div class="app-title">关于</div>
+    </div>
+    <div class="about-content">
+        <div class="about-card glass pop-in-element glow-on-hover">
+            <h2>关于本站 <span class="uptime" id="siteUptime">已运行 0 天 0 时 0 分 0 秒</span></h2>
+            <p>这是一个基于纯前端技术打造的现代化个人相册。</p>
+            <p>采用了 Liquid Glass (亚克力毛玻璃) 设计语言，支持 360° 全景图片、视频播放、手势缩放以及自动媒体扫描功能。</p>
+            <br>
+            <p style="color: var(--text-gray); font-size: 0.9em;">Powered by Github & 彬哥</p>
+        </div>
+
+        <!-- 更新日志卡片：已移除 glow-on-hover 类，无高光效果 -->
+        <div class="update-log-card glass pop-in-element" id="updateLogCard" style="animation-delay: 0.2s;">
+            <h3>📋 版本更新日志</h3>
+            <div id="updateLogContent">加载中...</div>
+        </div>
+    </div>
+</div>
+
+<!-- 悬浮底栏 -->
+<div id="bottom-nav" class="glass glow-on-hover">
+    <div class="nav-capsule" id="nav-capsule"></div>
+    <div class="nav-item active" id="tab-albums" onclick="switchTab('albums')">合集</div>
+    <div class="nav-item" id="tab-about" onclick="switchTab('about')">关于</div>
+</div>
+
+<!-- 网格页 -->
+<div id="view-grid" class="view-page gallery-container">
+    <div class="app-bar glass" style="border-radius: 0 0 20px 20px;">
+        <button class="btn-icon glow-on-hover" onclick="navigateTo('view-albums')">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <div class="app-title" id="grid-title">相册</div>
+    </div>
+    <div class="photos-grid" id="photos-grid-container"></div>
+    <div class="grid-scanning-indicator" id="grid-scanning-indicator">
+        <div class="mini-spinner" style="display: block;"></div>
+        正在寻找更多内容...
+    </div>
+</div>
+
+<!-- 查看器 -->
+<div id="view-viewer" class="view-page">
+    <div class="viewer-app-bar">
+        <button class="btn-icon glow-on-hover" onclick="closeViewer()">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <div class="app-title" id="viewer-counter" style="font-size: 1em;">1 / 1</div>
+        <div style="width: 40px;"></div>
+    </div>
+    <div class="viewer-content" id="viewer-content">
+        <div class="loading-spinner" id="viewer-loading"></div>
+        <img id="standard-img" src="" alt="图片预览" style="display: none;">
+        <div id="panorama-container"></div>
+        <div id="video-container">
+            <video id="standard-video" playsinline controls><source src="" type="video/mp4" /></video>
+        </div>
+        <button class="nav-btn nav-prev glass glow-on-hover" onclick="prevImage()">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+        </button>
+        <button class="nav-btn nav-next glass glow-on-hover" onclick="nextImage()">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+        </button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+
+<script>
+    /* ==========================================
+       全局高光绑定（排除底栏内选项）
+       ========================================== */
+    document.querySelectorAll('.glow-on-hover').forEach(el => {
+        if (el.closest('#bottom-nav') && el !== document.getElementById('bottom-nav')) return;
+        el.addEventListener('mousemove', e => {
+            const rect = el.getBoundingClientRect();
+            el.style.setProperty('--x', (e.clientX - rect.left) + 'px');
+            el.style.setProperty('--y', (e.clientY - rect.top) + 'px');
         });
-    </script>
+        el.addEventListener('mouseleave', () => {
+            el.style.removeProperty('--x');
+            el.style.removeProperty('--y');
+        });
+    });
+
+    /* ==========================================
+       0. 密码验证
+       ========================================== */
+    const TARGET_HASH = "e9ab39f01d431c5250493a3dc493bba9c43f73a4461c72b5135ee09738582af7";
+    let pwdTimer = null;
+
+    function checkLockout() {
+        const lockoutTime = parseInt(localStorage.getItem('album_lockout') || '0');
+        const now = Date.now();
+        if (now < lockoutTime) {
+            const remaining = Math.ceil((lockoutTime - now) / 1000);
+            disablePwdInput(remaining);
+            return true;
+        }
+        return false;
+    }
+
+    function disablePwdInput(seconds) {
+        const btn = document.getElementById('pwd-btn');
+        const input = document.getElementById('pwd-input');
+        const msg = document.getElementById('pwd-msg');
+        btn.disabled = true;
+        input.disabled = true;
+        if (pwdTimer) clearInterval(pwdTimer);
+        let left = seconds;
+        msg.textContent = `错误次数过多，请等待 ${left} 秒`;
+        pwdTimer = setInterval(() => {
+            left--;
+            if (left <= 0) {
+                clearInterval(pwdTimer);
+                btn.disabled = false;
+                input.disabled = false;
+                msg.textContent = '';
+                localStorage.setItem('album_attempts', '0');
+            } else {
+                msg.textContent = `错误次数过多，请等待 ${left} 秒`;
+            }
+        }, 1000);
+    }
+
+    async function verifyPassword() {
+        if (checkLockout()) return;
+        const input = document.getElementById('pwd-input').value;
+        const msg = document.getElementById('pwd-msg');
+        if (!input) return;
+        const msgBuffer = new TextEncoder().encode(input);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        if (hashHex === TARGET_HASH) {
+            sessionStorage.setItem('album_unlocked', 'true');
+            localStorage.setItem('album_attempts', '0');
+            startAppFlow();
+        } else {
+            let attempts = parseInt(localStorage.getItem('album_attempts') || '0') + 1;
+            localStorage.setItem('album_attempts', attempts);
+            if (attempts >= 10) {
+                localStorage.setItem('album_lockout', Date.now() + 60000);
+                checkLockout();
+            } else {
+                msg.textContent = `密码错误！剩余尝试次数: ${10 - attempts}`;
+                document.getElementById('pwd-input').value = '';
+            }
+        }
+    }
+
+    document.getElementById('pwd-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') verifyPassword();
+    });
+
+    /* ==========================================
+       0.5 启动与背景
+       ========================================== */
+    function startAppFlow() {
+        navigateTo('view-loading');
+        const bingApiUrl = 'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN';
+        fetch(bingApiUrl)
+            .then(res => {
+                if (!res.ok) throw new Error('Network response was not ok');
+                return res.json();
+            })
+            .then(data => {
+                if (data.images && data.images[0] && data.images[0].url) {
+                    const imageUrl = 'https://www.bing.com' + data.images[0].url;
+                    loadBackgroundImage(imageUrl);
+                } else {
+                    throw new Error('No image data');
+                }
+            })
+            .catch(() => {
+                loadBackgroundImage('https://binge1129.github.io/img/2.jpg');
+            });
+    }
+
+    function loadBackgroundImage(url) {
+        const img = new Image();
+        img.onload = () => {
+            const bgLayer = document.getElementById('bg-layer');
+            bgLayer.style.backgroundImage = `url('${url}')`;
+            bgLayer.style.opacity = '1';
+            setTimeout(() => { navigateTo('view-home'); }, 500);
+        };
+        img.onerror = () => {
+            document.getElementById('bg-layer').style.opacity = '1';
+            navigateTo('view-home');
+        };
+        img.src = url;
+    }
+
+    /* ==========================================
+       1. 核心状态
+       ========================================== */
+    const BASE_URL = 'https://binge1129.github.io/img/';
+    const IMAGE_CONFIG = { standard: [], pano: [], video: [] };
+    const isScanning = { standard: false, pano: false, video: false };
+    let hasStartedScan = false;
+    let currentView = 'view-password';
+    let currentAlbumType = '';
+    let currentImageIndex = 0;
+    let panoramaViewer = null;
+    let panzoomInstance = null;
+    let plyrInstance = null;
+
+    /* ==========================================
+       2. 自定义句子 + 打字光标特效
+       ========================================== */
+    const customQuotes = [];
+    let currentQuoteIndex = 0;
+    let useCustomQuotes = false;
+    let typewriterTimer = null;
+    let autoNextTimer = null;
+    let isTyping = false;
+
+    async function loadCustomQuotes() {
+        try {
+            const resp = await fetch('https://binge1129.github.io/text.txt');
+            if (!resp.ok) throw new Error('Failed');
+            const text = await resp.text();
+            const lines = text.split(/\r?\n/).map(s => s.trim()).filter(s => s.length > 0);
+            if (lines.length > 0) {
+                customQuotes.push(...lines);
+                useCustomQuotes = true;
+                typewriteQuote(customQuotes[0]);
+                return;
+            }
+        } catch (e) {}
+        useCustomQuotes = false;
+        typewriteQuote('生活明朗，万物可爱。');
+    }
+
+    function typewriteQuote(text) {
+        clearQuoteTimers();
+        const quoteText = document.getElementById('quoteText');
+        const quoteAuthor = document.getElementById('quoteAuthor');
+        quoteAuthor.textContent = 'By 彬哥的留言';
+        let i = 0;
+        isTyping = true;
+        const update = () => {
+            quoteText.innerHTML = '"' + text.substring(0, i) + '<span class="blinking-cursor"></span>"';
+        };
+        update();
+        typewriterTimer = setInterval(() => {
+            i++;
+            if (i <= text.length) {
+                quoteText.innerHTML = '"' + text.substring(0, i) + '<span class="blinking-cursor"></span>"';
+            } else {
+                clearInterval(typewriterTimer);
+                isTyping = false;
+                quoteText.innerHTML = '"' + text + '<span class="blinking-cursor"></span>"';
+                if (useCustomQuotes && customQuotes.length > 1) {
+                    autoNextTimer = setTimeout(() => {
+                        currentQuoteIndex = (currentQuoteIndex + 1) % customQuotes.length;
+                        typewriteQuote(customQuotes[currentQuoteIndex]);
+                    }, 3000);
+                }
+            }
+        }, 60);
+    }
+
+    function clearQuoteTimers() {
+        if (typewriterTimer) clearInterval(typewriterTimer);
+        if (autoNextTimer) clearTimeout(autoNextTimer);
+        isTyping = false;
+    }
+
+    function handleQuoteClick() {
+        if (!useCustomQuotes || customQuotes.length === 0) return;
+        if (isTyping) {
+            clearQuoteTimers();
+            const fullText = customQuotes[currentQuoteIndex];
+            document.getElementById('quoteText').innerHTML = '"' + fullText + '<span class="blinking-cursor"></span>"';
+            isTyping = false;
+            autoNextTimer = setTimeout(() => {
+                currentQuoteIndex = (currentQuoteIndex + 1) % customQuotes.length;
+                typewriteQuote(customQuotes[currentQuoteIndex]);
+            }, 300);
+        } else {
+            clearQuoteTimers();
+            currentQuoteIndex = (currentQuoteIndex + 1) % customQuotes.length;
+            typewriteQuote(customQuotes[currentQuoteIndex]);
+        }
+    }
+
+    document.getElementById('quoteContainer').addEventListener('click', handleQuoteClick);
+
+    /* ==========================================
+       3. 底栏导航
+       ========================================== */
+    let currentTab = 'albums';
+    function switchTab(tab) {
+        if (currentTab === tab) return;
+        currentTab = tab;
+        const capsule = document.getElementById('nav-capsule');
+        const tabAlbums = document.getElementById('tab-albums');
+        const tabAbout = document.getElementById('tab-about');
+        if (tab === 'about') {
+            capsule.style.transform = 'translateX(100%)';
+            tabAlbums.classList.remove('active');
+            tabAbout.classList.add('active');
+            navigateTo('view-about');
+        } else {
+            capsule.style.transform = 'translateX(0)';
+            tabAbout.classList.remove('active');
+            tabAlbums.classList.add('active');
+            navigateTo('view-albums');
+        }
+    }
+
+    /* ==========================================
+       4. 媒体扫描
+       ========================================== */
+    function checkMediaExists(url, type) {
+        return new Promise(resolve => {
+            if (type === 'video') {
+                const video = document.createElement('video');
+                video.onloadedmetadata = () => resolve(true);
+                video.onerror = () => resolve(false);
+                video.src = url;
+            } else {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = url;
+            }
+        });
+    }
+
+    function enterAlbums() {
+        currentTab = 'albums';
+        document.getElementById('nav-capsule').style.transform = 'translateX(0)';
+        document.getElementById('tab-about').classList.remove('active');
+        document.getElementById('tab-albums').classList.add('active');
+        navigateTo('view-albums');
+        if (!hasStartedScan) {
+            hasStartedScan = true;
+            startBackgroundScan('standard', '', 'image');
+            startBackgroundScan('pano', '-', 'image');
+            startBackgroundScan('video', 'v', 'video');
+        }
+    }
+
+    async function startBackgroundScan(category, prefix, mediaType) {
+        isScanning[category] = true;
+        document.getElementById(`spinner-${category}`).style.display = 'block';
+        let id = 1, fails = 0;
+        const MAX_FAILS = 3, MAX_LIMIT = 100;
+        const ext = mediaType === 'video' ? '.mp4' : '.jpg';
+        while (fails < MAX_FAILS && id <= MAX_LIMIT) {
+            const url = `${BASE_URL}${prefix}${id}${ext}`;
+            if (await checkMediaExists(url, mediaType)) {
+                IMAGE_CONFIG[category].push(id);
+                fails = 0;
+                updateAlbumCardUI(category, url, mediaType);
+                if (currentView === 'view-grid' && currentAlbumType === category) {
+                    appendPhotoToGrid(category, id, IMAGE_CONFIG[category].length - 1);
+                }
+            } else fails++;
+            id++;
+        }
+        isScanning[category] = false;
+        document.getElementById(`spinner-${category}`).style.display = 'none';
+        if (currentView === 'view-grid' && currentAlbumType === category) {
+            document.getElementById('grid-scanning-indicator').style.display = 'none';
+        }
+    }
+
+    function updateAlbumCardUI(category, latestUrl, mediaType) {
+        const count = IMAGE_CONFIG[category].length;
+        document.getElementById(`count-${category}`).textContent = `${count} ${mediaType==='video'?'个视频':'张照片'}`;
+        if (count === 1) {
+            document.getElementById(`cover-${category}`).src = mediaType==='video' ? latestUrl+'#t=0.1' : latestUrl;
+        }
+    }
+
+    /* ==========================================
+       5. 页面导航
+       ========================================== */
+    function navigateTo(pageId) {
+        currentView = pageId;
+        document.querySelectorAll('.view-page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        const bg = document.getElementById('bg-layer');
+        bg.style.filter = ['view-home','view-password','view-loading'].includes(pageId) ? 'blur(0px)' : 'blur(15px)';
+        const nav = document.getElementById('bottom-nav');
+        if (pageId === 'view-albums' || pageId === 'view-about') nav.classList.add('show');
+        else nav.classList.remove('show');
+        if (pageId !== 'view-viewer') {
+            if (panoramaViewer) { panoramaViewer.destroy(); panoramaViewer = null; }
+            if (panzoomInstance) panzoomInstance.reset();
+            if (plyrInstance) plyrInstance.pause();
+        }
+        if (pageId !== 'view-home') clearQuoteTimers();
+    }
+
+    /* ==========================================
+       6. 网格与查看器
+       ========================================== */
+    function openAlbum(type) {
+        currentAlbumType = type;
+        let title = type === 'pano' ? '360° 全景图片' : (type === 'video' ? '视频合集' : '标准图片');
+        document.getElementById('grid-title').textContent = title;
+        const container = document.getElementById('photos-grid-container');
+        container.innerHTML = '';
+        IMAGE_CONFIG[type].forEach((id, idx) => appendPhotoToGrid(type, id, idx));
+        document.getElementById('grid-scanning-indicator').style.display = isScanning[type] ? 'flex' : 'none';
+        navigateTo('view-grid');
+    }
+
+    function appendPhotoToGrid(type, id, index) {
+        const container = document.getElementById('photos-grid-container');
+        const isVideo = type === 'video';
+        const ext = isVideo ? '.mp4' : '.jpg';
+        const prefix = isVideo ? 'v' : (type === 'pano' ? '-' : '');
+        const url = `${BASE_URL}${prefix}${id}${ext}`;
+        const item = document.createElement('div');
+        item.className = 'photo-item glass';
+        item.style.animationDelay = `${(index % 10) * 0.05}s`;
+        item.onclick = () => openViewer(index);
+        let innerHTML;
+        if (isVideo) {
+            innerHTML = `<video src="${url}#t=0.1" preload="metadata"></video>
+                         <div class="pano-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg> 视频</div>`;
+        } else if (type === 'pano') {
+            innerHTML = `<img src="${url}" loading="lazy" alt="Pano ${id}">
+                         <div class="pano-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg> 360°</div>`;
+        } else {
+            innerHTML = `<img src="${url}" loading="lazy" alt="Photo ${id}">`;
+        }
+        item.innerHTML = innerHTML;
+        container.appendChild(item);
+    }
+
+    function openViewer(index) {
+        currentImageIndex = index;
+        navigateTo('view-viewer');
+        renderCurrentImage();
+    }
+
+    function closeViewer() { navigateTo('view-grid'); }
+
+    function renderCurrentImage() {
+        const images = IMAGE_CONFIG[currentAlbumType];
+        if (!images || images.length === 0) return;
+        const id = images[currentImageIndex];
+        const isPano = currentAlbumType === 'pano';
+        const isVideo = currentAlbumType === 'video';
+        const ext = isVideo ? '.mp4' : '.jpg';
+        const prefix = isVideo ? 'v' : (isPano ? '-' : '');
+        const url = `${BASE_URL}${prefix}${id}${ext}`;
+
+        document.getElementById('viewer-counter').textContent = `${currentImageIndex + 1} / ${images.length}`;
+        document.getElementById('standard-img').style.display = 'none';
+        document.getElementById('panorama-container').style.display = 'none';
+        document.getElementById('video-container').style.display = 'none';
+        if (plyrInstance) plyrInstance.pause();
+        document.getElementById('viewer-loading').style.display = 'block';
+
+        if (isPano) {
+            document.getElementById('panorama-container').style.display = 'block';
+            if (panoramaViewer) panoramaViewer.destroy();
+            panoramaViewer = pannellum.viewer('panorama-container', {
+                type: 'equirectangular', panorama: url, autoLoad: true,
+                showControls: true, compass: false, mouseZoom: true, keyboardZoom: false
+            });
+            setTimeout(() => { document.getElementById('viewer-loading').style.display = 'none'; }, 1000);
+        } else if (isVideo) {
+            document.getElementById('video-container').style.display = 'flex';
+            const video = document.getElementById('standard-video');
+            video.src = url;
+            if (!plyrInstance) {
+                plyrInstance = new Plyr(video, { controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'] });
+            }
+            document.getElementById('viewer-loading').style.display = 'none';
+        } else {
+            const img = document.getElementById('standard-img');
+            img.style.display = 'block';
+            img.style.opacity = '0';
+            if (!panzoomInstance) {
+                panzoomInstance = Panzoom(img, { maxScale: 5, minScale: 1, step: 0.3 });
+                document.getElementById('viewer-content').addEventListener('wheel', panzoomInstance.zoomWithWheel);
+                img.addEventListener('dblclick', (e) => {
+                    if (panzoomInstance.getScale() > 1) panzoomInstance.reset();
+                    else panzoomInstance.zoomToPoint(2, e);
+                });
+                let lastTap = 0;
+                img.addEventListener('touchend', (e) => {
+                    const now = Date.now();
+                    if (now - lastTap < 300 && now - lastTap > 0) {
+                        if (panzoomInstance.getScale() > 1) panzoomInstance.reset();
+                        else panzoomInstance.zoom(2);
+                        e.preventDefault();
+                    }
+                    lastTap = now;
+                });
+            }
+            panzoomInstance.reset();
+            const onLoad = () => {
+                document.getElementById('viewer-loading').style.display = 'none';
+                img.style.opacity = '1';
+            };
+            img.onload = onLoad;
+            img.src = url;
+            if (img.complete) onLoad();
+        }
+    }
+
+    function nextImage() {
+        if (currentImageIndex < IMAGE_CONFIG[currentAlbumType].length - 1) {
+            currentImageIndex++;
+            renderCurrentImage();
+        }
+    }
+
+    function prevImage() {
+        if (currentImageIndex > 0) {
+            currentImageIndex--;
+            renderCurrentImage();
+        }
+    }
+
+    let touchStartX = 0, touchEndX = 0;
+    document.getElementById('viewer-content').addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    document.getElementById('viewer-content').addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        if (currentAlbumType === 'pano' || (panzoomInstance && panzoomInstance.getScale() > 1.05) || e.target.closest('.plyr__controls')) return;
+        if (touchEndX < touchStartX - 50) nextImage();
+        if (touchEndX > touchStartX + 50) prevImage();
+    }, { passive: true });
+
+    /* ==========================================
+       7. 更新日志解析
+       ========================================== */
+    async function loadUpdateLog() {
+        const container = document.getElementById('updateLogContent');
+        try {
+            const resp = await fetch('https://binge1129.github.io/update.txt');
+            if (!resp.ok) throw new Error('Failed');
+            const raw = await resp.text();
+            const blocks = raw.split(/版本 /).filter(b => b.trim());
+            if (blocks.length === 0) throw new Error('Empty');
+            let html = '';
+            blocks.forEach(block => {
+                const lines = block.split(/\r?\n/).map(l => l.trim()).filter(l => l);
+                if (lines.length === 0) return;
+                const header = lines[0];
+                const versionMatch = header.match(/v[\d.]+/);
+                const dateMatch = header.match(/Date:([\d.]+)/);
+                const timeMatch = header.match(/Time:([\d:]+)/);
+                const version = versionMatch ? versionMatch[0] : '未知';
+                const date = dateMatch ? dateMatch[1] : '未知日期';
+                const time = timeMatch ? timeMatch[1] : '';
+                const dateStr = date + (time ? ' ' + time : '');
+                const entries = lines.slice(1).filter(l => /^\d+\./.test(l));
+                html += `<div class="log-entry">`;
+                html += `<span class="log-version">${version}</span><span class="log-date">${dateStr}</span>`;
+                entries.forEach(entry => {
+                    html += `<div class="log-desc">${entry.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</div>`;
+                });
+                html += `</div>`;
+            });
+            container.innerHTML = html;
+        } catch (e) {
+            container.innerHTML = `<div class="log-entry"><span class="log-version">v1.0</span><span class="log-date">2026.06.20</span><div class="log-desc">初始发布</div></div>`;
+        }
+    }
+
+    /* ==========================================
+       8. 运行时间（含秒）
+       ========================================== */
+    const siteStart = new Date('2026-07-04T02:18:00');
+    function updateUptime() {
+        if (currentView !== 'view-about') return;
+        const now = new Date();
+        let diff = Math.floor((now - siteStart) / 1000);
+        const d = Math.floor(diff / 86400); diff -= d * 86400;
+        const h = Math.floor(diff / 3600); diff -= h * 3600;
+        const m = Math.floor(diff / 60); diff -= m * 60;
+        const s = diff;
+        document.getElementById('siteUptime').textContent = `已运行 ${d} 天 ${h} 时 ${m} 分 ${s} 秒`;
+    }
+
+    function updateTime() {
+        const now = new Date();
+        document.getElementById('timeDisplay').textContent = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+        const weekDays = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+        document.getElementById('dateDisplay').textContent = `${now.getFullYear()}年${String(now.getMonth()+1).padStart(2,'0')}月${String(now.getDate()).padStart(2,'0')}日 ${weekDays[now.getDay()]}`;
+        updateUptime();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateTime();
+        setInterval(updateTime, 1000);
+        loadCustomQuotes();
+        loadUpdateLog();
+        if (sessionStorage.getItem('album_unlocked') === 'true') {
+            startAppFlow();
+        } else {
+            checkLockout();
+        }
+    });
+</script>
 </body>
 </html>
