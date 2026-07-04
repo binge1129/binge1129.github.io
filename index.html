@@ -29,14 +29,11 @@
             user-select: none; -webkit-user-select: none; -ms-user-select: none;
         }
 
-        /* 高光基础类 */
         .glow-on-hover {
             position: relative;
             overflow: hidden;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
-
-        /* 内部径向高光 */
         .glow-on-hover::after {
             content: '';
             position: absolute;
@@ -48,8 +45,6 @@
             z-index: 1;
         }
         .glow-on-hover:hover::after { opacity: 1; }
-
-        /* 手电筒式边缘高光 */
         .glow-on-hover::before {
             content: '';
             position: absolute;
@@ -120,10 +115,8 @@
         .loader-ring {
             width: 60px; height: 60px; border: 4px solid rgba(255,255,255,0.1);
             border-top-color: var(--primary-color); border-radius: 50%;
-            animation: spin 1s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite; margin-bottom: 20px;
+            animation: spin 1s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
         }
-        .loader-text { font-size: 1.1em; color: var(--text-gray); letter-spacing: 2px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
 
         #view-home { justify-content: center; align-items: center; text-align: center; padding: 20px; }
         .time-display { font-size: 4.5em; font-weight: 700; text-shadow: 0 4px 20px rgba(0,0,0,0.6); letter-spacing: 2px; }
@@ -161,7 +154,6 @@
         }
         .btn-enter:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-3px); }
 
-        /* 滚动容器通用 */
         .gallery-container { height: 100%; display: flex; flex-direction: column; }
 
         .app-bar {
@@ -178,15 +170,16 @@
         .btn-icon svg { width: 24px; height: 24px; fill: currentColor; }
         .app-title { font-size: 1.3em; font-weight: 500; }
 
-        /* 合集页滚动容器：修复滚动问题 */
         .albums-scroll {
             flex: 1;
             overflow-y: auto;
             display: flex;
-            justify-content: center;  /* 水平居中 */
-            /* 移除 align-items: center，改用 margin 自动垂直居中 */
+            justify-content: center;
             padding-bottom: 100px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
+        .albums-scroll::-webkit-scrollbar { display: none; }
 
         .albums-grid {
             display: grid;
@@ -195,9 +188,8 @@
             padding: 20px;
             max-width: 600px;
             width: 100%;
-            margin: auto;          /* 垂直居中（内容少时生效） */
+            margin: auto;
         }
-
         @media (max-width: 600px) {
             .albums-grid {
                 grid-template-columns: 1fr 1fr;
@@ -301,13 +293,33 @@
             z-index: 0;
         }
         .nav-item {
-            position: relative; z-index: 1; padding: 12px 35px; font-size: 1.1em; font-weight: 500;
-            color: var(--text-gray); cursor: pointer; transition: color 0.3s; user-select: none;
+            position: relative; z-index: 1;
+            padding: 10px 25px;
+            font-size: 1.1em; font-weight: 500;
+            color: var(--text-gray); cursor: pointer;
+            transition: color 0.3s; user-select: none;
+            white-space: nowrap;
         }
         .nav-item.active { color: white; }
 
-        .photos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 3px; padding: 3px; }
-        @media (min-width: 600px) { .photos-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } }
+        .photos-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 100px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .photos-scroll::-webkit-scrollbar { display: none; }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 3px;
+            padding: 3px;
+        }
+        @media (min-width: 600px) {
+            .photos-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+        }
 
         .photo-item {
             aspect-ratio: 1; overflow: hidden; cursor: pointer; position: relative; opacity: 0;
@@ -404,7 +416,6 @@
 <!-- 加载页 -->
 <div id="view-loading" class="view-page">
     <div class="loader-ring"></div>
-    <div class="loader-text">正在加载精彩内容...</div>
 </div>
 
 <!-- 主页 -->
@@ -511,10 +522,13 @@
         </button>
         <div class="app-title" id="grid-title">相册</div>
     </div>
-    <div class="photos-grid" id="photos-grid-container"></div>
-    <div class="grid-scanning-indicator" id="grid-scanning-indicator">
-        <div class="mini-spinner" style="display: block;"></div>
-        正在寻找更多内容...
+
+    <div class="photos-scroll">
+        <div class="photos-grid" id="photos-grid-container"></div>
+        <div class="grid-scanning-indicator" id="grid-scanning-indicator">
+            <div class="mini-spinner" style="display: block;"></div>
+            正在寻找更多内容...
+        </div>
     </div>
 </div>
 
@@ -549,7 +563,7 @@
 
 <script>
     /* ==========================================
-       全局高光绑定（排除底栏内选项）
+       全局高光绑定
        ========================================== */
     document.querySelectorAll('.glow-on-hover').forEach(el => {
         if (el.closest('#bottom-nav') && el !== document.getElementById('bottom-nav')) return;
@@ -565,7 +579,7 @@
     });
 
     /* ==========================================
-       0. 密码验证
+       0. 密码验证（完整版）
        ========================================== */
     const TARGET_HASH = "e9ab39f01d431c5250493a3dc493bba9c43f73a4461c72b5135ee09738582af7";
     let pwdTimer = null;
@@ -608,7 +622,10 @@
         if (checkLockout()) return;
         const input = document.getElementById('pwd-input').value;
         const msg = document.getElementById('pwd-msg');
-        if (!input) return;
+        if (!input) {
+            msg.textContent = '请输入密码';
+            return;
+        }
         const msgBuffer = new TextEncoder().encode(input);
         const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -879,7 +896,7 @@
     }
 
     /* ==========================================
-       6. 网格与查看器
+       6. 网格与查看器（完整版）
        ========================================== */
     function openAlbum(type) {
         currentAlbumType = type;
@@ -1004,16 +1021,7 @@
         }
     }
 
-    let touchStartX = 0, touchEndX = 0;
-    document.getElementById('viewer-content').addEventListener('touchstart', e => {
-        touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-    document.getElementById('viewer-content').addEventListener('touchend', e => {
-        touchEndX = e.changedTouches[0].screenX;
-        if (currentAlbumType === 'pano' || (panzoomInstance && panzoomInstance.getScale() > 1.05) || e.target.closest('.plyr__controls')) return;
-        if (touchEndX < touchStartX - 50) nextImage();
-        if (touchEndX > touchStartX + 50) prevImage();
-    }, { passive: true });
+    // 注意：已完全移除查看器滑动切换事件，仅保留按钮切换。
 
     /* ==========================================
        7. 更新日志解析
