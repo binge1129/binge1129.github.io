@@ -161,7 +161,9 @@
         }
         .btn-enter:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-3px); }
 
+        /* 滚动容器通用 */
         .gallery-container { height: 100%; display: flex; flex-direction: column; }
+
         .app-bar {
             position: sticky; top: 0; padding: 12px 20px; display: flex; align-items: center; gap: 15px; z-index: 100;
             border-bottom: 1px solid var(--glass-border);
@@ -176,16 +178,16 @@
         .btn-icon svg { width: 24px; height: 24px; fill: currentColor; }
         .app-title { font-size: 1.3em; font-weight: 500; }
 
+        /* 合集页滚动容器：修复滚动问题 */
         .albums-scroll {
             flex: 1;
             overflow-y: auto;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            justify-content: center;  /* 水平居中 */
+            /* 移除 align-items: center，改用 margin 自动垂直居中 */
             padding-bottom: 100px;
         }
 
-        /* 合集卡片网格基础 */
         .albums-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -193,9 +195,9 @@
             padding: 20px;
             max-width: 600px;
             width: 100%;
+            margin: auto;          /* 垂直居中（内容少时生效） */
         }
 
-        /* 手机端布局 */
         @media (max-width: 600px) {
             .albums-grid {
                 grid-template-columns: 1fr 1fr;
@@ -206,24 +208,12 @@
                 padding: 15px;
                 max-width: 100%;
             }
-            .album-card.standard-card {
-                grid-area: standard;
-                /* 大型卡片：占满宽度 */
-            }
-            .album-card.pano-card {
-                grid-area: pano;
-            }
-            .album-card.video-card {
-                grid-area: video;
-            }
-            /* 调整卡片内边距和字体 */
+            .album-card.standard-card { grid-area: standard; }
+            .album-card.pano-card { grid-area: pano; }
+            .album-card.video-card { grid-area: video; }
             .album-info { padding: 12px; }
             .album-title { font-size: 1em; }
             .album-count { font-size: 0.8em; }
-            /* 增大标准图片卡片的高度感 */
-            .standard-card .album-cover {
-                aspect-ratio: 16/9; /* 或者保持1:1但增大？这里保持1:1，但可调整 */
-            }
         }
 
         .album-card {
@@ -414,13 +404,13 @@
 <!-- 加载页 -->
 <div id="view-loading" class="view-page">
     <div class="loader-ring"></div>
-    <div class="loader-text"></div>
+    <div class="loader-text">正在加载精彩内容...</div>
 </div>
 
 <!-- 主页 -->
 <div id="view-home" class="view-page">
     <div class="time-display" id="timeDisplay">00:00:00</div>
-    <div class="date-display" id="dateDisplay"></div>
+    <div class="date-display" id="dateDisplay">加载中...</div>
 
     <div class="quote-container glass pop-in-element glow-on-hover" id="quoteContainer">
         <div class="quote-text" id="quoteText">"<span class="blinking-cursor"></span>"</div>
@@ -446,7 +436,6 @@
 
     <div class="albums-scroll">
         <div class="albums-grid">
-            <!-- 给每个卡片加上对应类，用于手机端 grid 布局 -->
             <div class="album-card glass pop-in-element glow-on-hover standard-card" onclick="openAlbum('standard')">
                 <img class="album-cover" id="cover-standard" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="标准图片">
                 <div class="album-info">
@@ -502,7 +491,7 @@
 
         <div class="update-log-card glass pop-in-element" id="updateLogCard" style="animation-delay: 0.2s;">
             <h3>📋 版本更新日志</h3>
-            <div id="updateLogContent"></div>
+            <div id="updateLogContent">加载中...</div>
         </div>
     </div>
 </div>
@@ -525,7 +514,7 @@
     <div class="photos-grid" id="photos-grid-container"></div>
     <div class="grid-scanning-indicator" id="grid-scanning-indicator">
         <div class="mini-spinner" style="display: block;"></div>
-        
+        正在寻找更多内容...
     </div>
 </div>
 
