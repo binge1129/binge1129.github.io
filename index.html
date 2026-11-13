@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>我的相册 - Powered by Github&彬哥</title>
+    <title>相册 - Powered by Html</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
@@ -29,49 +29,30 @@
             user-select: none; -webkit-user-select: none; -ms-user-select: none;
         }
 
-        /* 高光效果 */
         .glow-on-hover {
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
         .glow-on-hover::after {
-            content: '';
-            position: absolute;
-            inset: 0;
+            content: ''; position: absolute; inset: 0;
             background: radial-gradient(circle at var(--x) var(--y), rgba(255,255,255,0.25) 0%, transparent 60%);
-            opacity: 0;
-            transition: opacity 0.2s;
-            pointer-events: none;
-            z-index: 1;
+            opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 1;
         }
         .glow-on-hover:hover::after { opacity: 1; }
         .glow-on-hover::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            pointer-events: none;
-            z-index: 2;
-            opacity: 0;
-            transition: opacity 0s;
-            box-shadow:
-                inset 0 0 0 1.5px rgba(255, 255, 255, 0.6),
-                0 0 12px 2px rgba(255, 255, 255, 0.4);
+            content: ''; position: absolute; inset: 0; border-radius: inherit;
+            pointer-events: none; z-index: 2; opacity: 0; transition: opacity 0s;
+            box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.6), 0 0 12px 2px rgba(255, 255, 255, 0.4);
             -webkit-mask-image: radial-gradient(circle 70px at var(--x) var(--y), black 40%, transparent 70%);
             mask-image: radial-gradient(circle 70px at var(--x) var(--y), black 40%, transparent 70%);
         }
-        .glow-on-hover:hover::before {
-            opacity: 1;
-            transition: opacity 0.2s;
-        }
+        .glow-on-hover:hover::before { opacity: 1; transition: opacity 0.2s; }
 
         #bg-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover; background-position: center;
             transition: opacity var(--transition-speed) ease, filter var(--transition-speed) ease;
-            z-index: 0; opacity: 0;
-            background-color: #1a1a2e;
+            z-index: 0; opacity: 0; background-color: #1a1a2e;
         }
         #bg-layer::before {
             content: ''; position: absolute; inset: 0;
@@ -120,12 +101,7 @@
         }
 
         #view-home { justify-content: center; align-items: center; text-align: center; padding: 20px; }
-        .home-panorama {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-        }
+        .home-panorama { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
         .time-display { font-size: 4.5em; font-weight: 700; text-shadow: 0 4px 20px rgba(0,0,0,0.6); letter-spacing: 2px; position: relative; z-index: 1; }
         .date-display { font-size: 1.2em; margin-bottom: 40px; text-shadow: 0 2px 10px rgba(0,0,0,0.6); position: relative; z-index: 1; }
 
@@ -134,22 +110,14 @@
             70% { transform: scale(1.05) translateY(-5px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
         }
-        .pop-in-element {
-            opacity: 0;
-            animation: popIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
+        .pop-in-element { opacity: 0; animation: popIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         .pop-in-element:nth-child(1) { animation-delay: 0.1s; }
         .pop-in-element:nth-child(2) { animation-delay: 0.2s; }
         .pop-in-element:nth-child(3) { animation-delay: 0.3s; }
 
         .quote-container {
-            padding: 25px 35px;
-            border-radius: 20px;
-            max-width: 600px;
-            margin-bottom: 50px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            position: relative; z-index: 1;
+            padding: 25px 35px; border-radius: 20px; max-width: 600px; margin-bottom: 50px;
+            cursor: pointer; transition: transform 0.2s; position: relative; z-index: 1;
         }
         .quote-container:active { transform: scale(0.97); }
         .quote-text { font-size: 1.2em; font-style: italic; line-height: 1.6; min-height: 2.5em; }
@@ -158,8 +126,7 @@
         .btn-enter {
             padding: 16px 45px; font-size: 1.2em; font-weight: 600; color: white;
             border-radius: 30px; cursor: pointer; transition: all 0.3s ease;
-            display: flex; align-items: center; gap: 10px;
-            position: relative; z-index: 1;
+            display: flex; align-items: center; gap: 10px; position: relative; z-index: 1;
         }
         .btn-enter:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-3px); }
 
@@ -167,10 +134,8 @@
 
         .app-bar {
             position: sticky; top: 0; padding: 12px 20px; display: flex; align-items: center; gap: 15px; z-index: 100;
-            border-bottom: 1px solid var(--glass-border);
-            border-radius: 0 0 20px 20px;
-            overflow: hidden;
-            flex-shrink: 0;
+            border-bottom: 1px solid var(--glass-border); border-radius: 0 0 20px 20px;
+            overflow: hidden; flex-shrink: 0;
         }
         .btn-icon {
             background: none; border: none; color: var(--text-light); cursor: pointer;
@@ -180,34 +145,20 @@
         .app-title { font-size: 1.3em; font-weight: 500; }
 
         .albums-scroll {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            justify-content: center;
-            padding-bottom: 100px;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
+            flex: 1; overflow-y: auto; display: flex; justify-content: center;
+            padding-bottom: 100px; scrollbar-width: none; -ms-overflow-style: none;
         }
         .albums-scroll::-webkit-scrollbar { display: none; }
 
         .albums-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            padding: 20px;
-            max-width: 600px;
-            width: 100%;
-            margin: auto;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+            padding: 20px; max-width: 600px; width: 100%; margin: auto;
         }
         @media (max-width: 600px) {
             .albums-grid {
                 grid-template-columns: 1fr 1fr;
-                grid-template-areas:
-                    "standard standard"
-                    "pano video";
-                gap: 15px;
-                padding: 15px;
-                max-width: 100%;
+                grid-template-areas: "standard standard" "pano video";
+                gap: 15px; padding: 15px; max-width: 100%;
             }
             .album-card.standard-card { grid-area: standard; }
             .album-card.pano-card { grid-area: pano; }
@@ -217,12 +168,7 @@
             .album-count { font-size: 0.8em; }
         }
 
-        .album-card {
-            border-radius: 16px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
+        .album-card { border-radius: 16px; overflow: hidden; cursor: pointer; transition: transform 0.3s; }
         .album-card:hover { transform: translateY(-5px); }
         .album-cover { width: 100%; aspect-ratio: 1; object-fit: cover; background: rgba(0,0,0,0.5); display: block; }
         .album-info { padding: 15px; }
@@ -232,53 +178,26 @@
         .mini-spinner {
             width: 12px; height: 12px; border: 2px solid rgba(255,255,255,0.3);
             border-top-color: var(--primary-color); border-radius: 50%;
-            animation: spin-mini 1s linear infinite;
-            display: none;
+            animation: spin-mini 1s linear infinite; display: none;
         }
 
         #view-about { padding: 0; }
-        #view-about .app-bar {
-            justify-content: center;
-            border-radius: 20px;
-            margin: 20px auto 0;
-            padding: 10px 20px;
-            max-width: 500px;
-        }
+        #view-about .app-bar { justify-content: center; border-radius: 20px; margin: 20px auto 0; padding: 10px 20px; max-width: 500px; }
         #view-about .app-title { margin-left: 0; }
 
         .about-content {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: 20px 20px 120px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex: 1; overflow-y: auto; overflow-x: hidden; padding: 20px 20px 120px;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        .about-card {
-            padding: 30px;
-            border-radius: 24px;
-            width: 100%;
-            max-width: 500px;
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
+        .about-card { padding: 30px; border-radius: 24px; width: 100%; max-width: 500px; line-height: 1.8; margin-bottom: 20px; }
         .about-card h2 { margin-bottom: 15px; color: var(--primary-color); }
         .uptime { font-size: 0.85em; color: var(--text-gray); margin-left: 10px; }
 
         .update-log-card {
-            padding: 25px;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 500px;
-            line-height: 1.8;
-            margin-top: 0;
-            margin-bottom: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
+            padding: 25px; border-radius: 20px; width: 100%; max-width: 500px; line-height: 1.8;
+            margin-top: 0; margin-bottom: 20px; max-height: 300px; overflow-y: auto;
+            scrollbar-width: none; -ms-overflow-style: none;
         }
         .update-log-card::-webkit-scrollbar { display: none; }
         .update-log-card h3 { margin-bottom: 15px; color: var(--primary-color); }
@@ -298,33 +217,25 @@
             position: absolute; top: 6px; left: 6px; width: calc(50% - 6px); height: calc(100% - 12px);
             background: rgba(255,255,255,0.15); border-radius: 30px;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            z-index: 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 0;
         }
         .nav-item {
-            position: relative; z-index: 1;
-            padding: 12px 24px;
+            position: relative; z-index: 1; padding: 12px 24px;
             display: flex; align-items: center; justify-content: center;
-            color: var(--text-gray); cursor: pointer;
-            transition: color 0.3s; user-select: none;
+            color: var(--text-gray); cursor: pointer; transition: color 0.3s; user-select: none;
         }
         .nav-item svg { width: 24px; height: 24px; fill: currentColor; }
         .nav-item.active { color: white; }
 
         .photos-scroll {
-            flex: 1;
-            overflow-y: auto;
-            padding-bottom: 100px;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
+            flex: 1; overflow-y: auto; padding-bottom: 100px;
+            scrollbar-width: none; -ms-overflow-style: none;
         }
         .photos-scroll::-webkit-scrollbar { display: none; }
 
         .photos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 3px;
-            padding: 3px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 3px; padding: 3px;
         }
         @media (min-width: 600px) {
             .photos-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
@@ -342,7 +253,7 @@
         }
         .grid-scanning-indicator {
             grid-column: 1 / -1; text-align: center; padding: 20px; color: var(--text-gray);
-            display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.9em; display: none;
+            display: none; align-items: center; justify-content: center; gap: 10px; font-size: 0.9em;
         }
 
         #view-viewer { background: #000; }
@@ -373,32 +284,32 @@
         @media (max-width: 768px) { .nav-btn { display: none; } }
 
         .loading-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255,255,255,0.1);
-            border-top-color: var(--primary-color);
-            border-radius: 50%;
-            animation: spin-centered 1s linear infinite;
-            display: none;
-            z-index: 10;
+            position: absolute; top: 50%; left: 50%; width: 40px; height: 40px;
+            border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--primary-color);
+            border-radius: 50%; animation: spin-centered 1s linear infinite;
+            display: none; z-index: 10;
         }
 
+        /* 查看器加载超时/失败提示层 */
+        #viewer-status {
+            position: absolute; inset: 0; display: none;
+            flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+            background: rgba(0,0,0,0.55); z-index: 15; padding: 20px; text-align: center;
+        }
+        #viewer-status .status-text { color: var(--text-gray); font-size: 1em; line-height: 1.6; }
+        #viewer-status .status-retry {
+            padding: 10px 26px; border-radius: 22px; border: 1px solid var(--glass-border);
+            color: #fff; cursor: pointer; font-size: 0.95em; background: rgba(255,255,255,0.08);
+            transition: background 0.2s;
+        }
+        #viewer-status .status-retry:hover { background: rgba(255,255,255,0.18); }
+        #viewer-status .status-retry:active { transform: scale(0.96); }
+
         .blinking-cursor {
-            display: inline-block;
-            width: 2px;
-            height: 1.2em;
-            background: var(--text-light);
-            margin-left: 2px;
-            vertical-align: text-bottom;
-            animation: blink 1s step-end infinite;
+            display: inline-block; width: 2px; height: 1.2em; background: var(--text-light);
+            margin-left: 2px; vertical-align: text-bottom; animation: blink 1s step-end infinite;
         }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
         @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes spin-centered {
@@ -415,7 +326,7 @@
 <!-- 密码页 -->
 <div id="view-password" class="view-page active">
     <div class="pwd-container glass pop-in-element glow-on-hover">
-        <div class="pwd-title">私密相册</div>
+        <div class="pwd-title">相册</div>
         <input type="password" id="pwd-input" class="pwd-input" placeholder="请输入访问密码" autocomplete="off">
         <button id="pwd-btn" class="pwd-btn glow-on-hover" onclick="verifyPassword()">解锁</button>
         <div id="pwd-msg" class="pwd-msg"></div>
@@ -427,7 +338,7 @@
     <div class="loader-ring"></div>
 </div>
 
-<!-- 主页：全景背景 -->
+<!-- 主页 -->
 <div id="view-home" class="view-page">
     <div id="home-panorama" class="home-panorama"></div>
     <div class="time-display" id="timeDisplay">00:00:00</div>
@@ -517,7 +428,7 @@
     </div>
 </div>
 
-<!-- 底部栏：图标 -->
+<!-- 底部栏 -->
 <div id="bottom-nav" class="glass glow-on-hover">
     <div class="nav-capsule" id="nav-capsule"></div>
     <div class="nav-item active" id="tab-albums" onclick="switchTab('albums')" title="合集">
@@ -562,6 +473,13 @@
         <div id="video-container">
             <video id="standard-video" playsinline controls><source src="" type="video/mp4" /></video>
         </div>
+
+        <!-- 加载超时/失败提示层 -->
+        <div id="viewer-status">
+            <div class="status-text"></div>
+            <button class="status-retry glow-on-hover">重新加载</button>
+        </div>
+
         <button class="nav-btn nav-prev glass glow-on-hover" onclick="prevImage()">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
         </button>
@@ -637,24 +555,28 @@
         const input = document.getElementById('pwd-input').value;
         const msg = document.getElementById('pwd-msg');
         if (!input) return;
-        const msgBuffer = new TextEncoder().encode(input);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        if (hashHex === TARGET_HASH) {
-            sessionStorage.setItem('album_unlocked', 'true');
-            localStorage.setItem('album_attempts', '0');
-            startAppFlow();
-        } else {
-            let attempts = parseInt(localStorage.getItem('album_attempts') || '0') + 1;
-            localStorage.setItem('album_attempts', attempts);
-            if (attempts >= 10) {
-                localStorage.setItem('album_lockout', Date.now() + 60000);
-                checkLockout();
+        try {
+            const msgBuffer = new TextEncoder().encode(input);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            if (hashHex === TARGET_HASH) {
+                sessionStorage.setItem('album_unlocked', 'true');
+                localStorage.setItem('album_attempts', '0');
+                startAppFlow();
             } else {
-                msg.textContent = `密码错误！剩余尝试次数: ${10 - attempts}`;
-                document.getElementById('pwd-input').value = '';
+                let attempts = parseInt(localStorage.getItem('album_attempts') || '0') + 1;
+                localStorage.setItem('album_attempts', attempts);
+                if (attempts >= 10) {
+                    localStorage.setItem('album_lockout', Date.now() + 60000);
+                    checkLockout();
+                } else {
+                    msg.textContent = `密码错误！剩余尝试次数: ${10 - attempts}`;
+                    document.getElementById('pwd-input').value = '';
+                }
             }
+        } catch (e) {
+            msg.textContent = '验证失败：' + e.message;
         }
     }
 
@@ -667,37 +589,69 @@
        ========================================== */
     function startAppFlow() {
         navigateTo('view-loading');
-        const bingApiUrl = 'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN';
-        fetch(bingApiUrl)
+        let entered = false;
+        const enterHome = () => {
+            if (entered) return;
+            entered = true;
+            navigateTo('view-home');
+        };
+
+        if (location.protocol === 'file:') {
+            document.getElementById('bg-layer').style.opacity = '1';
+            enterHome();
+            return;
+        }
+
+        const globalTimer = setTimeout(() => {
+            document.getElementById('bg-layer').style.opacity = '1';
+            enterHome();
+        }, 6000);
+
+        const controller = new AbortController();
+        const fetchTimer = setTimeout(() => controller.abort(), 4000);
+
+        fetch('https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN', { signal: controller.signal })
             .then(res => res.json())
             .then(data => {
+                clearTimeout(fetchTimer);
                 const imageUrl = 'https://www.bing.com' + data.images[0].url;
-                loadBackgroundImage(imageUrl);
+                loadBackgroundImage(imageUrl, () => {
+                    clearTimeout(globalTimer);
+                    enterHome();
+                });
             })
             .catch(() => {
-                loadBackgroundImage('https://binge1129.github.io/img/2.jpg');
+                clearTimeout(fetchTimer);
+                loadBackgroundImage('./img/2.jpg', () => {
+                    clearTimeout(globalTimer);
+                    enterHome();
+                });
             });
     }
 
-    function loadBackgroundImage(url) {
+    function loadBackgroundImage(url, done) {
+        const bgLayer = document.getElementById('bg-layer');
+        let finished = false;
+        const finish = () => {
+            if (finished) return;
+            finished = true;
+            bgLayer.style.opacity = '1';
+            if (done) done();
+        };
         const img = new Image();
         img.onload = () => {
-            const bgLayer = document.getElementById('bg-layer');
             bgLayer.style.backgroundImage = `url('${url}')`;
-            bgLayer.style.opacity = '1';
-            setTimeout(() => { navigateTo('view-home'); }, 500);
+            finish();
         };
-        img.onerror = () => {
-            document.getElementById('bg-layer').style.opacity = '1';
-            navigateTo('view-home');
-        };
+        img.onerror = finish;
         img.src = url;
+        setTimeout(finish, 3000);
     }
 
     /* ==========================================
        1. 核心状态
        ========================================== */
-    const BASE_URL = 'https://binge1129.github.io/img/';
+    const BASE_URL = './img/';
     const IMAGE_CONFIG = { standard: [], pano: [], video: [] };
     const isScanning = { standard: false, pano: false, video: false };
     let hasStartedScan = false;
@@ -720,8 +674,13 @@
     let isTyping = false;
 
     async function loadCustomQuotes() {
+        if (location.protocol === 'file:') {
+            useCustomQuotes = false;
+            typewriteQuote('生活明朗，万物可爱。');
+            return;
+        }
         try {
-            const resp = await fetch('https://binge1129.github.io/text.txt');
+            const resp = await fetch('./text.txt');
             if (!resp.ok) throw new Error('Failed');
             const text = await resp.text();
             const lines = text.split(/\r?\n/).map(s => s.trim()).filter(s => s.length > 0);
@@ -739,8 +698,7 @@
     function typewriteQuote(text) {
         clearQuoteTimers();
         const quoteText = document.getElementById('quoteText');
-        const quoteAuthor = document.getElementById('quoteAuthor');
-        quoteAuthor.textContent = 'By 彬哥的留言';
+        document.getElementById('quoteAuthor').textContent = 'By 彬哥的留言';
         let i = 0;
         isTyping = true;
         const update = () => {
@@ -819,15 +777,24 @@
        ========================================== */
     function checkMediaExists(url, type) {
         return new Promise(resolve => {
+            let settled = false;
+            const finish = (ok) => {
+                if (settled) return;
+                settled = true;
+                clearTimeout(timer);
+                resolve(ok);
+            };
+            const timer = setTimeout(() => finish(false), 8000);
+
             if (type === 'video') {
                 const video = document.createElement('video');
-                video.onloadedmetadata = () => resolve(true);
-                video.onerror = () => resolve(false);
+                video.onloadedmetadata = () => finish(true);
+                video.onerror = () => finish(false);
                 video.src = url;
             } else {
                 const img = new Image();
-                img.onload = () => resolve(true);
-                img.onerror = () => resolve(false);
+                img.onload = () => finish(true);
+                img.onerror = () => finish(false);
                 img.src = url;
             }
         });
@@ -850,25 +817,28 @@
     async function startBackgroundScan(category, prefix, mediaType) {
         isScanning[category] = true;
         document.getElementById(`spinner-${category}`).style.display = 'block';
-        let id = 1, fails = 0;
-        const MAX_FAILS = 3, MAX_LIMIT = 100;
-        const ext = mediaType === 'video' ? '.mp4' : '.jpg';
-        while (fails < MAX_FAILS && id <= MAX_LIMIT) {
-            const url = `${BASE_URL}${prefix}${id}${ext}`;
-            if (await checkMediaExists(url, mediaType)) {
-                IMAGE_CONFIG[category].push(id);
-                fails = 0;
-                updateAlbumCardUI(category, url, mediaType);
-                if (currentView === 'view-grid' && currentAlbumType === category) {
-                    appendPhotoToGrid(category, id, IMAGE_CONFIG[category].length - 1);
-                }
-            } else fails++;
-            id++;
-        }
-        isScanning[category] = false;
-        document.getElementById(`spinner-${category}`).style.display = 'none';
-        if (currentView === 'view-grid' && currentAlbumType === category) {
-            document.getElementById('grid-scanning-indicator').style.display = 'none';
+        try {
+            let id = 1, fails = 0;
+            const MAX_FAILS = 3, MAX_LIMIT = 100;
+            const ext = mediaType === 'video' ? '.mp4' : '.jpg';
+            while (fails < MAX_FAILS && id <= MAX_LIMIT) {
+                const url = `${BASE_URL}${prefix}${id}${ext}`;
+                if (await checkMediaExists(url, mediaType)) {
+                    IMAGE_CONFIG[category].push(id);
+                    fails = 0;
+                    updateAlbumCardUI(category, url, mediaType);
+                    if (currentView === 'view-grid' && currentAlbumType === category) {
+                        appendPhotoToGrid(category, id, IMAGE_CONFIG[category].length - 1);
+                    }
+                } else fails++;
+                id++;
+            }
+        } finally {
+            isScanning[category] = false;
+            document.getElementById(`spinner-${category}`).style.display = 'none';
+            if (currentView === 'view-grid' && currentAlbumType === category) {
+                document.getElementById('grid-scanning-indicator').style.display = 'none';
+            }
         }
     }
 
@@ -881,12 +851,11 @@
     }
 
     /* ==========================================
-       5. 页面导航（主页全景自动加载修复）
+       5. 页面导航
        ========================================== */
     function navigateTo(pageId) {
-        // 离开主页时销毁全景
         if (currentView === 'view-home' && homePanoramaViewer) {
-            homePanoramaViewer.destroy();
+            try { homePanoramaViewer.destroy(); } catch (e) {}
             homePanoramaViewer = null;
         }
         currentView = pageId;
@@ -896,22 +865,25 @@
         const bg = document.getElementById('bg-layer');
         if (pageId === 'view-home') {
             bg.style.filter = 'blur(0px)';
-            // 重建全景并强制加载
-            if (!homePanoramaViewer) {
-                homePanoramaViewer = pannellum.viewer('home-panorama', {
-                    type: 'equirectangular',
-                    panorama: 'https://binge1129.github.io/img/-5.jpg',
-                    autoRotate: -1.2,
-                    compass: false,
-                    showControls: false,
-                    mouseZoom: false,
-                    keyboardZoom: false,
-                    disableKeyboardCtrl: true,
-                    draggable: false,
-                    autoLoad: true,
-                });
-                // 强制调用 load 确保立即显示
-                homePanoramaViewer.load();
+            if (typeof pannellum !== 'undefined' && location.protocol !== 'file:' && !homePanoramaViewer) {
+                try {
+                    homePanoramaViewer = pannellum.viewer('home-panorama', {
+                        type: 'equirectangular',
+                        panorama: './img/-5.jpg',
+                        autoRotate: -1.2,
+                        compass: false,
+                        showControls: false,
+                        mouseZoom: false,
+                        keyboardZoom: false,
+                        disableKeyboardCtrl: true,
+                        draggable: false,
+                        autoLoad: true,
+                    });
+                    homePanoramaViewer.load();
+                } catch (e) {
+                    console.warn('主页全景初始化失败', e);
+                    homePanoramaViewer = null;
+                }
             }
         } else if (['view-password','view-loading'].includes(pageId)) {
             bg.style.filter = 'blur(0px)';
@@ -924,9 +896,10 @@
         else nav.classList.remove('show');
 
         if (pageId !== 'view-viewer') {
-            if (panoramaViewer) { panoramaViewer.destroy(); panoramaViewer = null; }
-            if (panzoomInstance) panzoomInstance.reset();
-            if (plyrInstance) plyrInstance.pause();
+            if (panoramaViewer) { try { panoramaViewer.destroy(); } catch (e) {} panoramaViewer = null; }
+            if (panzoomInstance) { try { panzoomInstance.reset(); } catch (e) {} }
+            if (plyrInstance) { try { plyrInstance.pause(); } catch (e) {} }
+            hideViewerStatus();
         }
         if (pageId !== 'view-home') clearQuoteTimers();
     }
@@ -960,10 +933,10 @@
             innerHTML = `<video src="${url}#t=0.1" preload="metadata"></video>
                          <div class="pano-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg> 视频</div>`;
         } else if (type === 'pano') {
-            innerHTML = `<img src="${url}" loading="lazy" alt="Pano ${id}">
+            innerHTML = `<img src="${url}" alt="Pano ${id}">
                          <div class="pano-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg> 360°</div>`;
         } else {
-            innerHTML = `<img src="${url}" loading="lazy" alt="Photo ${id}">`;
+            innerHTML = `<img src="${url}" alt="Photo ${id}">`;
         }
         item.innerHTML = innerHTML;
         container.appendChild(item);
@@ -977,9 +950,29 @@
 
     function closeViewer() { navigateTo('view-grid'); }
 
+    /* 查看器状态提示辅助函数 */
+    function showViewerStatus(text, showRetry) {
+        const status = document.getElementById('viewer-status');
+        status.querySelector('.status-text').textContent = text;
+        status.querySelector('.status-retry').style.display = showRetry ? 'inline-block' : 'none';
+        status.style.display = 'flex';
+    }
+
+    function hideViewerStatus() {
+        const status = document.getElementById('viewer-status');
+        status.style.display = 'none';
+    }
+
+    /* 统一的加载结束：不管成功、失败、超时，都关闭 loading */
+    function endViewerLoading() {
+        document.getElementById('viewer-loading').style.display = 'none';
+    }
+
     function renderCurrentImage() {
         const images = IMAGE_CONFIG[currentAlbumType];
-        if (!images || images.length === 0) return;
+        const loading = document.getElementById('viewer-loading');
+        if (!images || images.length === 0) { loading.style.display = 'none'; return; }
+
         const id = images[currentImageIndex];
         const isPano = currentAlbumType === 'pano';
         const isVideo = currentAlbumType === 'video';
@@ -991,55 +984,177 @@
         document.getElementById('standard-img').style.display = 'none';
         document.getElementById('panorama-container').style.display = 'none';
         document.getElementById('video-container').style.display = 'none';
-        if (plyrInstance) plyrInstance.pause();
-        document.getElementById('viewer-loading').style.display = 'block';
+        if (plyrInstance) { try { plyrInstance.pause(); } catch (e) {} }
+        hideViewerStatus();
 
-        if (isPano) {
-            document.getElementById('panorama-container').style.display = 'block';
-            if (panoramaViewer) panoramaViewer.destroy();
-            panoramaViewer = pannellum.viewer('panorama-container', {
-                type: 'equirectangular', panorama: url, autoLoad: true,
-                showControls: true, compass: false, mouseZoom: true, keyboardZoom: false
-            });
-            setTimeout(() => { document.getElementById('viewer-loading').style.display = 'none'; }, 1000);
-        } else if (isVideo) {
-            document.getElementById('video-container').style.display = 'flex';
-            const video = document.getElementById('standard-video');
-            video.src = url;
-            if (!plyrInstance) {
-                plyrInstance = new Plyr(video, { controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'] });
+        // 清掉上一次遗留的计时器
+        clearTimeout(window._viewerTimer);
+        window._viewerTimer = null;
+
+        // 先显示 loading，进入真正的加载流程
+        loading.style.display = 'block';
+
+        // 15 秒慢加载提示：只提示、不关 loading、不显示白图；真正的 onload 仍然有效
+        const armSlowHint = () => {
+            clearTimeout(window._viewerTimer);
+            window._viewerTimer = setTimeout(() => {
+                // 如果用户此时仍在当前查看器，并且 loading 还在转，说明还在加载
+                if (!document.getElementById('view-viewer').classList.contains('active')) return;
+                showViewerStatus('网络较慢，仍在加载中…可以继续等待，或点击重试', true);
+            }, 15000);
+        };
+
+        const clearTimer = () => {
+            clearTimeout(window._viewerTimer);
+            window._viewerTimer = null;
+        };
+
+        try {
+            /* ---------- 全景 ---------- */
+            if (isPano) {
+                document.getElementById('panorama-container').style.display = 'block';
+                if (panoramaViewer) { try { panoramaViewer.destroy(); } catch (e) {} panoramaViewer = null; }
+
+                const canUsePannellum = typeof pannellum !== 'undefined' && location.protocol !== 'file:';
+                if (!canUsePannellum) {
+                    // 降级：当普通图片显示
+                    const pc = document.getElementById('panorama-container');
+                    pc.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:contain;background:#000;" alt="全景图">`;
+                    endViewerLoading();
+                    hideViewerStatus();
+                    armSlowHint();
+                    return;
+                }
+
+                let panoDone = false;
+                const finishPano = () => {
+                    if (panoDone) return;
+                    panoDone = true;
+                    clearTimer();
+                    endViewerLoading();
+                    hideViewerStatus();
+                };
+                panoramaViewer = pannellum.viewer('panorama-container', {
+                    type: 'equirectangular', panorama: url, autoLoad: true,
+                    showControls: true, compass: false, mouseZoom: true, keyboardZoom: false
+                });
+                panoramaViewer.on('load', finishPano);
+                panoramaViewer.on('error', () => {
+                    // 全景出错：不假装成功，给重试提示
+                    clearTimer();
+                    endViewerLoading();
+                    showViewerStatus('全景加载失败，点击重试', true);
+                });
+                armSlowHint();
+
+                // 绑定重试
+                document.getElementById('viewer-status').querySelector('.status-retry').onclick = () => {
+                    renderCurrentImage();
+                };
+                return;
             }
-            document.getElementById('viewer-loading').style.display = 'none';
-        } else {
+
+            /* ---------- 视频 ---------- */
+            if (isVideo) {
+                document.getElementById('video-container').style.display = 'flex';
+                const video = document.getElementById('standard-video');
+                let videoDone = false;
+                const finishVideo = () => {
+                    if (videoDone) return;
+                    videoDone = true;
+                    clearTimer();
+                    endViewerLoading();
+                    hideViewerStatus();
+                };
+                video.onloadeddata = finishVideo;
+                video.onerror = () => {
+                    clearTimer();
+                    endViewerLoading();
+                    showViewerStatus('视频加载失败，点击重试', true);
+                };
+                video.src = url;
+                video.load();
+
+                if (!plyrInstance && typeof Plyr !== 'undefined') {
+                    try {
+                        plyrInstance = new Plyr(video, { controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'] });
+                    } catch (e) { console.warn('Plyr 初始化失败', e); }
+                }
+
+                document.getElementById('viewer-status').querySelector('.status-retry').onclick = () => {
+                    renderCurrentImage();
+                };
+                armSlowHint();
+                return;
+            }
+
+            /* ---------- 普通图片 ---------- */
             const img = document.getElementById('standard-img');
             img.style.display = 'block';
             img.style.opacity = '0';
-            if (!panzoomInstance) {
-                panzoomInstance = Panzoom(img, { maxScale: 5, minScale: 1, step: 0.3 });
-                document.getElementById('viewer-content').addEventListener('wheel', panzoomInstance.zoomWithWheel);
-                img.addEventListener('dblclick', (e) => {
-                    if (panzoomInstance.getScale() > 1) panzoomInstance.reset();
-                    else panzoomInstance.zoomToPoint(2, e);
-                });
-                let lastTap = 0;
-                img.addEventListener('touchend', (e) => {
-                    const now = Date.now();
-                    if (now - lastTap < 300 && now - lastTap > 0) {
-                        if (panzoomInstance.getScale() > 1) panzoomInstance.reset();
-                        else panzoomInstance.zoom(2);
-                        e.preventDefault();
-                    }
-                    lastTap = now;
-                });
-            }
-            panzoomInstance.reset();
-            const onLoad = () => {
-                document.getElementById('viewer-loading').style.display = 'none';
+
+            const finish = () => {
+                clearTimer();
+                endViewerLoading();
+                hideViewerStatus();
                 img.style.opacity = '1';
             };
-            img.onload = onLoad;
+
+            img.onload = finish;
+            img.onerror = () => {
+                clearTimer();
+                endViewerLoading();
+                // 不显示白图，明确告诉用户失败并给重试
+                showViewerStatus('图片加载失败，点击重试', true);
+            };
+
+            if (!panzoomInstance && typeof Panzoom !== 'undefined') {
+                try {
+                    panzoomInstance = Panzoom(img, { maxScale: 5, minScale: 1, step: 0.3 });
+                    document.getElementById('viewer-content').addEventListener('wheel', panzoomInstance.zoomWithWheel);
+                    img.addEventListener('dblclick', (e) => {
+                        if (panzoomInstance.getScale() > 1) panzoomInstance.reset();
+                        else panzoomInstance.zoomToPoint(2, e);
+                    });
+                    let lastTap = 0;
+                    img.addEventListener('touchend', (e) => {
+                        const now = Date.now();
+                        if (now - lastTap < 300 && now - lastTap > 0) {
+                            if (panzoomInstance.getScale() > 1) panzoomInstance.reset();
+                            else panzoomInstance.zoom(2);
+                            e.preventDefault();
+                        }
+                        lastTap = now;
+                    });
+                } catch (e) { console.warn('Panzoom 初始化失败，图片仍可显示', e); }
+            }
+            try { if (panzoomInstance) panzoomInstance.reset(); } catch (e) {}
+
+            // 先移除旧 src 再赋值，避免相同 src 不触发 onload
+            img.removeAttribute('src');
             img.src = url;
-            if (img.complete) onLoad();
+
+            document.getElementById('viewer-status').querySelector('.status-retry').onclick = () => {
+                // 加时间戳强制重试，防止缓存
+                const retryUrl = url + (url.indexOf('?') === -1 ? '?' : '&') + 't=' + Date.now();
+                hideViewerStatus();
+                loading.style.display = 'block';
+                img.style.opacity = '0';
+                clearTimer();
+                img.removeAttribute('src');
+                img.src = retryUrl;
+                armSlowHint();
+            };
+            armSlowHint();
+        } catch (e) {
+            // 最外层兜底：意外错误也不能让 loading 永远转
+            console.error('查看器渲染出错', e);
+            clearTimer();
+            endViewerLoading();
+            showViewerStatus('加载出错，点击重试', true);
+            document.getElementById('viewer-status').querySelector('.status-retry').onclick = () => {
+                renderCurrentImage();
+            };
         }
     }
 
@@ -1062,8 +1177,12 @@
        ========================================== */
     async function loadUpdateLog() {
         const container = document.getElementById('updateLogContent');
+        if (location.protocol === 'file:') {
+            container.innerHTML = `<div class="log-entry"><span class="log-version">v1.0</span><span class="log-date">2026.06.20</span><div class="log-desc">初始发布</div></div>`;
+            return;
+        }
         try {
-            const resp = await fetch('https://binge1129.github.io/update.txt');
+            const resp = await fetch('./update.txt');
             if (!resp.ok) throw new Error('Failed');
             const raw = await resp.text();
             const blocks = raw.split(/版本 /).filter(b => b.trim());
@@ -1095,7 +1214,7 @@
     }
 
     /* ==========================================
-       8. 运行时间（含秒）
+       8. 运行时间与时钟
        ========================================== */
     const siteStart = new Date('2026-07-04T02:18:00');
     function updateUptime() {
